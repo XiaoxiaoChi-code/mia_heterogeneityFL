@@ -27,6 +27,33 @@ def get_dataset(args):
         dict_party_user, dict_sample_user = sample_dirichlet_train_data(train_dataset, args.num_users, args.num_samples,
                                                                         args.alpha)
 
+    elif args.dataset == 'CIFAR10':
+        data_dir = './data/CIFAR10'
+
+        apply_transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.1307,), (0.3081,))
+        ])
+        train_dataset = datasets.CIFAR10(data_dir,train=True, transform=apply_transform, download=True)
+        test_dataset = datasets.CIFAR10(data_dir,train=False,transform=apply_transform,download=True)
+
+        # sampling non-iid data
+        dict_party_user, dict_sample_user = sample_dirichlet_train_data(train_dataset, args.num_users, args.num_samples,
+                                                                        args.alpha)
+
+    elif args.dataset == 'CIFAR100':
+        data_dir = './data/CIFAR100'
+        apply_transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.1307,), (0.3081,))
+        ])
+        train_dataset = datasets.CIFAR100(data_dir, train=True, transform=apply_transform, download=True)
+        test_dataset = datasets.CIFAR100(data_dir, train=False, transform=apply_transform, download=True)
+
+        # sampling non-iid data
+        dict_party_user, dict_sample_user = sample_dirichlet_train_data(train_dataset, args.num_users, args.num_samples,
+                                                                        args.alpha)
+
     elif args.dataset == 'Synthetic' and args.iid == True:
         data_dir = './data/synthetic/synthetic_x_0.npz'
         synt_0 = np.load(data_dir)
