@@ -1,6 +1,7 @@
 import copy
 import numpy as np
 import torch
+import wandb
 
 from models.Fed import FedAvg
 from models.Nets import MLP, Mnistcnn
@@ -11,6 +12,10 @@ from utils.dataset import get_dataset, exp_details
 from utils.options import args_parser
 
 if __name__ == '__main__':
+    wandb.init(
+        project ="fl-heterogeneity",
+        config={},
+    )
     # parse args
     args = args_parser()
     args.device = torch.device('cuda:{}'.format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
@@ -37,6 +42,7 @@ if __name__ == '__main__':
     print(net_glob)
     net_glob.train()
 
+    wandb.config.update(args)
     # copy weights
     w_glob = net_glob.state_dict()
 
@@ -88,6 +94,10 @@ if __name__ == '__main__':
     # experiment setting
     exp_details(args)
 
+    wandb.log({
+        "acc_train": acc_train,
+        "acc_test": acc_test
+    })
     print('Experimental result summary:')
     print("Training accuracy of the joint model: {:.2f}".format(acc_train))
     print("Testing accuracy of the joint model: {:.2f}".format(acc_test))

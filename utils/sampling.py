@@ -22,7 +22,7 @@ def build_classes_dict(dataset):
 
 def sample_dirichlet_train_data(dataset, num_participants, num_samples, alpha=0.1):
     data_classes = build_classes_dict(dataset)
-    class_size = len(data_classes[0])
+    class_size = len(data_classes[0]) # why class 0?
     per_participant_list = defaultdict(list)
     per_samples_list = defaultdict(list) # randomly select training samples for evaluating source inference attacks
     no_classes = len(data_classes.keys())
@@ -31,7 +31,7 @@ def sample_dirichlet_train_data(dataset, num_participants, num_samples, alpha=0.
         image_num = []
         random.shuffle(data_classes[n])
         sampled_probabilities = class_size * np.random.dirichlet(
-            np.array(num_participants * [alpha]))
+            np.array(num_participants * [alpha])) # why is alpha in form of list?
         for user in range(num_participants):
             no_imgs = int(round(sampled_probabilities[user]))
             sampled_list = data_classes[n][:min(len(data_classes[n]), no_imgs)]
