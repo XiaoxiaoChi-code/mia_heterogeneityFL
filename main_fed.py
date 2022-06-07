@@ -3,7 +3,7 @@ import numpy as np
 import torch
 
 from models.Fed import FedAvg
-from models.Nets import MLP, Mnistcnn
+from models.Nets import MLP, Mnistcnn, CIFAcnn
 from models.Sia import SIA
 from models.Update import LocalUpdate
 from models.test import test_fun
@@ -17,10 +17,13 @@ if __name__ == '__main__':
 
     # load dataset and split data for users
     dataset_train, dataset_test, dict_party_user, dict_sample_user = get_dataset(args)
-
     # build model
     if args.model == 'cnn' and args.dataset == 'MNIST':
         net_glob = Mnistcnn(args=args).to(args.device)
+    elif args.model == 'cnn' and args.dataset == 'CIFAR10': #刚才是这里的问题
+        net_glob = CIFAcnn(args=args).to(args.device)
+    elif args.model == 'cnn' and args.dataset == 'CIFAR100':
+        net_glob = CIFAcnn(args=args).to(args.device)
     elif args.model == 'mlp':
         len_in = 1
         dataset_train = dataset_train.dataset
