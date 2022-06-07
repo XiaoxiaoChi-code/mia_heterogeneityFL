@@ -26,6 +26,33 @@ def get_dataset(args):
         # sample non-iid data
         dict_party_user, dict_sample_user = sample_dirichlet_train_data(train_dataset, args.num_users, args.num_samples,
                                                                         args.alpha)
+    elif args.dataset == 'CIFAR10':
+        data_dir = './data/CIFAR10/'
+
+        apply_transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.1307,), (0.3081,))])
+
+        train_dataset = datasets.CIFAR10(data_dir, train=True, download=True,
+                                       transform=apply_transform)
+        test_dataset = datasets.CIFAR10(data_dir, train=False, download=True,
+                                      transform=apply_transform)
+        # sample non-iid data
+        dict_party_user, dict_sample_user = sample_dirichlet_train_data(train_dataset, args.num_users, args.num_samples,
+                                                                        args.alpha)
+
+    elif args.dataset == 'CIFAR100':
+        data_dir = './data/CIFAR100'
+        apply_transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize((0.1307,), (0.3081,))
+        ])
+        train_dataset = datasets.CIFAR100(data_dir, train=True, transform=apply_transform, download=True)
+        test_dataset = datasets.CIFAR100(data_dir, train=False, transform=apply_transform, download=True)
+
+        # sampling non-iid data
+        dict_party_user, dict_sample_user = sample_dirichlet_train_data(train_dataset, args.num_users, args.num_samples,
+                                                                        args.alpha)
 
     elif args.dataset == 'CIFAR10':
         data_dir = './data/CIFAR10'
